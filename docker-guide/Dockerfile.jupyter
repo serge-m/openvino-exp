@@ -1,6 +1,11 @@
 FROM openvino-guide
 LABEL maintainer="SergeM <sbmatyunin@gmail.com>"
 
+ARG UID
+ARG GID
+
+RUN echo ------------------ $UID $GID -----------------
+
 RUN pip3 install -U pip && \
     pip3 install jupyter && \
     apt-get clean -y && \
@@ -9,8 +14,8 @@ RUN pip3 install -U pip && \
 
 
 # Add a user
-RUN groupadd -r vino && \
-    useradd -m -s /bin/bash -r -g vino -G audio,video vino && \
+RUN groupadd -r vino --gid $GID && \
+    useradd -m -s /bin/bash -r -g vino -G audio,video --uid $UID vino && \
     mkdir -p /app && \
     chown -R vino:vino /app
 
